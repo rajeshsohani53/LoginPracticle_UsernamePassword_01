@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Hii Rajesh - This is Spring Boot (JSON version)</h2>
+
+    <form id="loginForm">
+        <label>UserName :</label>
+        <input type="text" id="username" name="username"><br><br>
+
+        <label>Password :</label>
+        <input type="password" id="password" name="password"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script>
+        // Grab the form element by its id
+        const form = document.getElementById("loginForm");
+
+        // Listen for the submit event
+        form.addEventListener("submit", async function(event) {
+
+            // Stop the browser's default form submission (form-encoded POST)
+            event.preventDefault();
+
+            // Read values from the input fields
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Build a JavaScript object matching your DTO's field names
+            const loginData = {
+                userName: username,   // matches LoginDTO.userName (capital N)
+                passWord: password    // matches LoginDTO.passWord (capital W)
+            };
+
+            try {
+                // Send JSON to the backend using fetch
+                const response = await fetch("http://localhost:8080/rajesh/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                // Backend returns a plain string, so read it as text
+                const result = await response.text();
+
+                // Show the result on the page
+                document.getElementById("result").innerText = result;
+
+            } catch (error) {
+                document.getElementById("result").innerText = "Error: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
